@@ -1,112 +1,124 @@
-Carpool Connect - Production-Ready Carpool Application
+# Carpool Connect - Production-Ready Carpool Application
+
 A full-stack carpool application built with a Spring Boot backend and React frontend, designed for production deployment.
-🏗️ Architecture
 
-Backend: Spring Boot 3.2.1, Java 17, MySQL 8.0, Spring Security
-Frontend: React 19, Vite, Tailwind CSS, React Router
-Security: BCrypt password hashing, JWT authentication, CORS protection
-Database: MySQL with connection pooling and optimized queries
-Caching: API response caching with configurable TTL
-Error Handling: Global exception handling with user-friendly messages
-Monitoring: Spring Boot Actuator with health checks
+## 🏗️ Architecture
 
-✨ Features
-User Management
+- **Backend**: Spring Boot 3.2.1, Java 17, MySQL 8.0, Spring Security
+- **Frontend**: React 19, Vite, Tailwind CSS, React Router
+- **Security**: BCrypt password hashing, JWT authentication, CORS protection
+- **Database**: MySQL with connection pooling and optimized queries
+- **Caching**: API response caching with configurable TTL
+- **Error Handling**: Global exception handling with user-friendly messages
+- **Monitoring**: Spring Boot Actuator with health checks
 
-User registration and authentication
-Secure password hashing (BCrypt)
-JWT-based session management
-Profile management with ratings
+## ✨ Features
 
-Ride Management
+### User Management
+- User registration and authentication
+- Secure password hashing (BCrypt)
+- JWT-based session management
+- Profile management with ratings
 
-Create and offer rides
-Search and filter available rides
-Real-time ride status updates
-Driver and passenger management
+### Ride Management
+- Create and offer rides
+- Search and filter available rides
+- Real-time ride status updates
+- Driver and passenger management
 
-Booking System
+### Booking System
+- Book rides with instant confirmation
+- Cancel bookings with persistence
+- View booking history and status
+- Configurable email notifications
 
-Book rides with instant confirmation
-Cancel bookings with persistence
-View booking history and status
-Configurable email notifications
+### Security & Production Features
+- Input validation and sanitization
+- SQL injection and XSS protection (CSP headers)
+- Environment-based configuration
+- API retry logic with exponential backoff
+- Response caching for performance
 
-Security & Production Features
+## 🚀 Quick Start (Development)
 
-Input validation and sanitization
-SQL injection and XSS protection (CSP headers)
-Environment-based configuration
-API retry logic with exponential backoff
-Response caching for performance
+### Prerequisites
+- Java 17 or higher
+- Maven 3.6+
+- Node.js 18+ and npm
+- MySQL 8.0+ (running on localhost:3306)
 
-🚀 Quick Start (Development)
-Prerequisites
-
-Java 17 or higher
-Maven 3.6+
-Node.js 18+ and npm
-MySQL 8.0+ (running on localhost:3306)
-
-Database Setup
+### Database Setup
 Run the following SQL commands to set up the database:
+```sql
 CREATE DATABASE IF NOT EXISTS carpool_db;
 CREATE USER 'carpool_user'@'localhost' IDENTIFIED BY 'secure_password';
 GRANT ALL PRIVILEGES ON carpool_db.* TO 'carpool_user'@'localhost';
 FLUSH PRIVILEGES;
+```
 
-Running the Application
-Backend (Spring Boot)
+### Running the Application
 
-Navigate to the backend directory:cd backend
+#### Backend (Spring Boot)
+1. Navigate to the backend directory:
+   ```bash
+   cd backend
+   ```
 
+2. Start the backend:
+   ```bash
+   mvn spring-boot:run
+   ```
+   The backend runs on http://localhost:8080.
 
-Start the backend:mvn spring-boot:run
+#### Frontend (React)
+1. Navigate to the frontend directory:
+   ```bash
+   cd frontend
+   ```
 
-The backend runs on http://localhost:8080.
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-Frontend (React)
+3. Start the development server:
+   ```bash
+   npm run dev
+   ```
+   The frontend runs on http://localhost:5173.
 
-Navigate to the frontend directory:cd frontend
+### Accessing the Application
+- **Frontend**: http://localhost:5173
+- **Backend API**: http://localhost:8080/api
+- **Connection Test**: http://localhost:5173/test-connection
 
+## 🐳 Production Deployment with Docker
 
-Install dependencies:npm install
+### Using Docker Compose (Recommended)
 
+1. Clone the repository and configure:
+   ```bash
+   git clone <repository-url>
+   cd carpool-application
+   cp .env.example .env
+   ```
 
-Start the development server:npm run dev
+2. Edit `.env` with production values (e.g., database credentials, JWT secret).
 
-The frontend runs on http://localhost:5173.
+3. Start all services:
+   ```bash
+   docker-compose up -d
+   ```
 
-Accessing the Application
+4. Access the application:
+   - **Frontend**: http://localhost:80
+   - **Backend API**: http://localhost:8080/api
+   - **Database**: localhost:3306
 
-Frontend: http://localhost:5173
-Backend API: http://localhost:8080/api
-Connection Test: http://localhost:5173/test-connection
+### Manual Docker Deployment
 
-🐳 Production Deployment with Docker
-Using Docker Compose (Recommended)
-
-Clone the repository and configure:
-git clone <repository-url>
-cd carpool-application
-cp .env.example .env
-
-Edit .env with production values (e.g., database credentials, JWT secret).
-
-Start all services:
-docker-compose up -d
-
-
-Access the application:
-
-Frontend: http://localhost:80
-Backend API: http://localhost:8080/api
-Database: localhost:3306
-
-
-
-Manual Docker Deployment
-Backend
+#### Backend
+```bash
 cd backend
 docker build -t carpool-backend .
 docker run -d \
@@ -116,127 +128,502 @@ docker run -d \
   -e DATABASE_URL=jdbc:mysql://host.docker.internal:3306/carpool_db \
   -e DATABASE_USERNAME=carpool_user \
   -e DATABASE_PASSWORD=secure_password \
-  -e JWT_SECRET=your-256-bit-secret-key \
   carpool-backend
+```
 
-Frontend
+#### Frontend
+```bash
 cd frontend
 docker build -t carpool-frontend .
 docker run -d \
   --name carpool-frontend \
   -p 80:80 \
   carpool-frontend
+```
 
-⚙️ Configuration
-Environment Variables
-Backend (.env or application-production.properties)
-# Database
-DATABASE_URL=jdbc:mysql://localhost:3306/carpool_db
-DATABASE_USERNAME=carpool_user
-DATABASE_PASSWORD=secure_password
+## 📁 Project Structure
 
-# Security
-JWT_SECRET=your-256-bit-secret-key
-JWT_EXPIRATION=86400000
+```
+carpool-application/
+├── backend/
+│   ├── src/
+│   │   ├── main/
+│   │   │   ├── java/
+│   │   │   │   └── com/carpoolconnect/
+│   │   │   │       ├── CarpoolConnectApplication.java
+│   │   │   │       ├── config/
+│   │   │   │       │   ├── SecurityConfig.java
+│   │   │   │       │   ├── CorsConfig.java
+│   │   │   │       │   └── CacheConfig.java
+│   │   │   │       ├── controller/
+│   │   │   │       │   ├── AuthController.java
+│   │   │   │       │   ├── UserController.java
+│   │   │   │       │   ├── RideController.java
+│   │   │   │       │   └── BookingController.java
+│   │   │   │       ├── dto/
+│   │   │   │       │   ├── UserDTO.java
+│   │   │   │       │   ├── RideDTO.java
+│   │   │   │       │   └── BookingDTO.java
+│   │   │   │       ├── entity/
+│   │   │   │       │   ├── User.java
+│   │   │   │       │   ├── Ride.java
+│   │   │   │       │   └── Booking.java
+│   │   │   │       ├── repository/
+│   │   │   │       │   ├── UserRepository.java
+│   │   │   │       │   ├── RideRepository.java
+│   │   │   │       │   └── BookingRepository.java
+│   │   │   │       ├── service/
+│   │   │   │       │   ├── AuthService.java
+│   │   │   │       │   ├── UserService.java
+│   │   │   │       │   ├── RideService.java
+│   │   │   │       │   └── BookingService.java
+│   │   │   │       ├── exception/
+│   │   │   │       │   ├── GlobalExceptionHandler.java
+│   │   │   │       │   └── CustomExceptions.java
+│   │   │   │       └── util/
+│   │   │   │           ├── JwtUtil.java
+│   │   │   │           └── ValidationUtil.java
+│   │   │   └── resources/
+│   │   │       ├── application.yml
+│   │   │       ├── application-production.yml
+│   │   │       └── db/migration/
+│   │   └── test/
+│   ├── pom.xml
+│   └── Dockerfile
+├── frontend/
+│   ├── src/
+│   │   ├── components/
+│   │   │   ├── auth/
+│   │   │   │   ├── Login.jsx
+│   │   │   │   └── Register.jsx
+│   │   │   ├── rides/
+│   │   │   │   ├── RideList.jsx
+│   │   │   │   ├── CreateRide.jsx
+│   │   │   │   └── RideDetails.jsx
+│   │   │   ├── bookings/
+│   │   │   │   ├── BookingList.jsx
+│   │   │   │   └── BookingDetails.jsx
+│   │   │   ├── common/
+│   │   │   │   ├── Header.jsx
+│   │   │   │   ├── Footer.jsx
+│   │   │   │   └── LoadingSpinner.jsx
+│   │   │   └── user/
+│   │   │       └── Profile.jsx
+│   │   ├── pages/
+│   │   │   ├── Home.jsx
+│   │   │   ├── Dashboard.jsx
+│   │   │   └── NotFound.jsx
+│   │   ├── services/
+│   │   │   ├── api.js
+│   │   │   ├── authService.js
+│   │   │   ├── rideService.js
+│   │   │   └── bookingService.js
+│   │   ├── context/
+│   │   │   └── AuthContext.jsx
+│   │   ├── hooks/
+│   │   │   ├── useAuth.js
+│   │   │   └── useApi.js
+│   │   ├── utils/
+│   │   │   ├── constants.js
+│   │   │   └── helpers.js
+│   │   ├── App.jsx
+│   │   └── main.jsx
+│   ├── package.json
+│   ├── vite.config.js
+│   ├── tailwind.config.js
+│   └── Dockerfile
+├── docker-compose.yml
+├── .env.example
+└── README.md
+```
 
-# CORS
-CORS_ALLOWED_ORIGINS=https://yourdomain.com,https://www.yourdomain.com
+## 🔧 Configuration Files
 
-Frontend (environment.js)
-export const environment = {
-  production: {
-    API_BASE_URL: 'https://api.yourdomain.com/api',
-    APP_NAME: 'CarpoolConnect',
-    DEBUG: false,
-    CACHE_DURATION: 30 * 60 * 1000, // 30 minutes
+### Backend Configuration (application.yml)
+```yaml
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+
+spring:
+  application:
+    name: carpool-connect
+  
+  datasource:
+    url: jdbc:mysql://localhost:3306/carpool_db
+    username: ${DATABASE_USERNAME:carpool_user}
+    password: ${DATABASE_PASSWORD:secure_password}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 5
+      idle-timeout: 300000
+      max-lifetime: 1200000
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        format_sql: true
+
+  security:
+    jwt:
+      secret: ${JWT_SECRET:your-secret-key-here}
+      expiration: 86400000 # 24 hours
+
+  cache:
+    type: simple
+    cache-names:
+      - rides
+      - users
+    caffeine:
+      spec: maximumSize=1000,expireAfterWrite=300s
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: when-authorized
+
+logging:
+  level:
+    com.carpoolconnect: INFO
+    org.springframework.security: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  file:
+    name: logs/carpool-connect.log
+```
+
+### Frontend Configuration (package.json)
+```json
+{
+  "name": "carpool-connect-frontend",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview"
   },
-};
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.8.1",
+    "axios": "^1.3.4",
+    "lucide-react": "^0.263.1",
+    "@headlessui/react": "^1.7.13",
+    "react-hook-form": "^7.43.5",
+    "date-fns": "^2.29.3",
+    "react-hot-toast": "^2.4.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.28",
+    "@types/react-dom": "^18.0.11",
+    "@vitejs/plugin-react": "^3.1.0",
+    "vite": "^4.1.0",
+    "eslint": "^8.35.0",
+    "eslint-plugin-react": "^7.32.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.3.4",
+    "tailwindcss": "^3.2.7",
+    "autoprefixer": "^10.4.14",
+    "postcss": "^8.4.21"
+  }
+}
+```
 
-Spring Profiles
+### Docker Compose Configuration
+```yaml
+version: '3.8'
 
-development: Full logging, auto-schema updates, relaxed security
-production: Minimal logging, schema validation, enhanced security
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: carpool-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: carpool_db
+      MYSQL_USER: carpool_user
+      MYSQL_PASSWORD: ${DATABASE_PASSWORD}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - carpool-network
 
-Database Configuration
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: carpool-backend
+    environment:
+      SPRING_PROFILES_ACTIVE: production
+      DATABASE_URL: jdbc:mysql://mysql:3306/carpool_db
+      DATABASE_USERNAME: carpool_user
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql
+    networks:
+      - carpool-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/api/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
-Database: carpool_db
-Host: localhost:3306
-Username: carpool_user
-Password: secure_password
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: carpool-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - carpool-network
 
-Modify settings in backend/src/main/resources/application.properties.
-Sample Data
-The application loads sample data on startup:
+volumes:
+  mysql_data:
 
-Users:
-john@example.com / password123
-jane@example.com / password123
-bob@example.com / password123
+networks:
+  carpool-network:
+    driver: bridge
+```
 
+### Environment Variables (.env.example)
+```env
+# Database Configuration
+MYSQL_ROOT_PASSWORD=root_password_here
+DATABASE_PASSWORD=secure_password_here
 
-Rides:
-Mumbai to Pune
-Delhi to Gurgaon
-Bangalore to Mysore
+# JWT Configuration
+JWT_SECRET=your-super-secret-jwt-key-min-256-bits
 
+# Email Configuration (Optional)
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USERNAME=your-email@gmail.com
+SMTP_PASSWORD=your-app-password
 
+# Application Configuration
+SPRING_PROFILES_ACTIVE=production
+API_BASE_URL=http://localhost:8080/api
+```
 
-API Endpoints
+## 🔒 Security Features
 
-GET /api/health: Health check
-POST /api/users/register: User registration
-POST /api/users/login: User login
-GET /api/users/{id}: Get user profile
-POST /api/rides: Create a ride
-GET /api/rides: Get all rides
-GET /api/rides/search: Search rides
-POST /api/bookings: Create a booking
+### Authentication & Authorization
+- JWT-based authentication with configurable expiration
+- BCrypt password hashing with salt rounds
+- Role-based access control (USER, DRIVER, ADMIN)
+- Secure session management
 
-Project Structure
-backend/
-├── src/main/java/com/carpool/
-│   ├── controller/        # REST controllers
-│   ├── service/           # Business logic
-│   ├── repository/        # Data access
-│   ├── entity/            # JPA entities
-│   ├── dto/               # Data transfer objects
-│   └── config/            # Configuration classes
-└── src/main/resources/
-    └── application.properties
+### API Security
+- CORS configuration for cross-origin requests
+- Input sanitization and validation
+- SQL injection prevention with JPA/Hibernate
+- XSS protection with Content Security Policy headers
+- Rate limiting for API endpoints
 
-frontend/
-├── src/
-│   ├── components/        # React components
-│   ├── utils/             # Utility functions (API calls)
-│   └── assets/            # Static assets
-├── package.json
-└── vite.config.js
+### Data Protection
+- Sensitive data encryption in database
+- Environment-based configuration
+- Secure password reset functionality
+- Data validation on both client and server side
 
-Troubleshooting
+## 📊 API Documentation
 
-Backend won't start:
+### Authentication Endpoints
+```
+POST /api/auth/register - User registration
+POST /api/auth/login - User login
+POST /api/auth/refresh - Token refresh
+POST /api/auth/logout - User logout
+POST /api/auth/forgot-password - Password reset request
+POST /api/auth/reset-password - Password reset confirmation
+```
 
-Verify Java 17+ and JAVA_HOME setup.
-Ensure MySQL is running on localhost:3306.
-Check credentials in application.properties.
+### User Management
+```
+GET /api/users/profile - Get user profile
+PUT /api/users/profile - Update user profile
+GET /api/users/{id} - Get user by ID
+PUT /api/users/{id}/rating - Update user rating
+```
 
+### Ride Management
+```
+GET /api/rides - Get all rides (with pagination and filters)
+POST /api/rides - Create new ride
+GET /api/rides/{id} - Get ride details
+PUT /api/rides/{id} - Update ride
+DELETE /api/rides/{id} - Delete ride
+GET /api/rides/search - Search rides by criteria
+```
 
-Frontend won't start:
+### Booking Management
+```
+GET /api/bookings - Get user bookings
+POST /api/bookings - Create new booking
+GET /api/bookings/{id} - Get booking details
+PUT /api/bookings/{id}/cancel - Cancel booking
+GET /api/bookings/history - Get booking history
+```
 
-Ensure Node.js 18+ is installed.
-Run npm install again.
+## 🧪 Testing
 
+### Backend Testing
+```bash
+cd backend
+mvn test
+mvn test -Dtest=UserServiceTest
+mvn verify # Integration tests
+```
 
-API calls failing:
+### Frontend Testing
+```bash
+cd frontend
+npm test
+npm run test:coverage
+npm run test:e2e
+```
 
-Confirm both servers are running.
-Check CORS configuration in backend.
+## 📈 Performance Optimization
 
+### Backend Optimizations
+- Database connection pooling with HikariCP
+- JPA query optimization with @Query annotations
+- Response caching with Spring Cache abstraction
+- Lazy loading for entity relationships
+- API pagination for large datasets
 
-Database connection issues:
+### Frontend Optimizations
+- Code splitting with React.lazy()
+- Image optimization and lazy loading
+- Bundle optimization with Vite
+- API response caching
+- Debounced search inputs
 
-Verify MySQL service is running.
-Ensure carpool_db exists.
-Check credentials in application.properties.
+## 🔧 Monitoring & Logging
 
+### Health Checks
+- Spring Boot Actuator endpoints
+- Database connectivity checks
+- Custom health indicators
+- Container health checks in Docker
 
+### Logging Configuration
+- Structured logging with JSON format
+- Log rotation and retention policies
+- Different log levels for environments
+- Centralized logging with ELK stack support
+
+## 🚢 Deployment Options
+
+### Cloud Deployment
+1. **AWS**: Deploy using ECS, RDS, and S3
+2. **Google Cloud**: Use Cloud Run, Cloud SQL, and Cloud Storage
+3. **Azure**: Deploy with Container Instances and Azure Database
+4. **Heroku**: Simple deployment with Heroku Postgres
+
+### Self-Hosted Deployment
+1. **Docker Swarm**: Multi-node container orchestration
+2. **Kubernetes**: Enterprise-grade container management
+3. **Traditional VM**: Direct deployment on virtual machines
+
+## 🔄 CI/CD Pipeline
+
+### GitHub Actions Example
+```yaml
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+      - name: Run backend tests
+        run: |
+          cd backend
+          mvn clean test
+      - name: Run frontend tests
+        run: |
+          cd frontend
+          npm ci
+          npm test
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Deploy to production
+        run: |
+          # Add deployment commands here
+```
+
+## 📚 Additional Resources
+
+### Documentation
+- [Spring Boot Documentation](https://docs.spring.io/spring-boot/docs/current/reference/html/)
+- [React Documentation](https://react.dev/)
+- [Docker Documentation](https://docs.docker.com/)
+- [MySQL Documentation](https://dev.mysql.com/doc/)
+
+### Best Practices
+- Follow RESTful API design principles
+- Implement proper error handling and logging
+- Use environment-specific configurations
+- Regular security updates and dependency management
+- Code review and testing practices
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 📞 Support
+
+For support and questions:
+- Create an issue in the GitHub repository
+- Check the documentation and FAQ
+- Contact the development team
+
+---
+
+**Carpool Connect** - Making shared transportation easy, secure, and efficient.
